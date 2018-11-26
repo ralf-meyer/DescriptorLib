@@ -30,10 +30,8 @@ setup(
     name="DescriptorLib",
     version="0.1",
     description="Library for description of local atomic environments",
-    setup_requires=["numpy"],
-    install_requires=["numpy", "scipy", "progressbar2", "tensorflow", "matplotlib"],
     packages=[
-        "DescriptorLib", 
+        "DescriptorLib",
         'DescriptorLib.test'
     ],
     package_dir={

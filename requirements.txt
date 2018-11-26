@@ -1,0 +1,5 @@
+numpy
+scipy
+progressbar2
+tensorflow
+matplotlib
