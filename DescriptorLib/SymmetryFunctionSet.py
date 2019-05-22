@@ -125,18 +125,18 @@ class SymmetryFunctionSet(object):
             funid, len(prms), ptr, cutid, cutoff)
         self.num_Gs[self.type_dict[type1]] += 1
 
-    def add_radial_functions(self, rss, etas, cuttype = "cos", cutoff = None):
+    def add_G2_functions(self, rss, etas, cuttype = "cos", cutoff = None):
         for rs, eta in zip(rss, etas):
             for (ti, tj) in product(self.atomtypes, repeat = 2):
                 self.add_TwoBodySymmetryFunction(ti, tj, "BehlerG2", [eta, rs],
                     cuttype = cuttype, cutoff = cutoff)
 
-    def add_radial_functions_evenly(self, N):
+    def add_G2_functions_evenly(self, N):
         rss = _np.linspace(0.,self.cutoff,N)
         etas = [2./(self.cutoff/(N-1))**2]*N
         self.add_radial_functions(rss, etas)
 
-    def add_angular_functions(self, etas, zetas, lambs, cuttype = "cos",
+    def add_G4_functions(self, etas, zetas, lambs, cuttype = "cos",
             cutoff = None):
         for eta in etas:
             for zeta in zetas:
@@ -199,12 +199,12 @@ class SymmetryFunctionSet(object):
         Gs = _np.zeros(sum(num_Gs_per_atom))
         if derivatives:
             dGs = _np.zeros((sum(num_Gs_per_atom), len(atoms), 3))
-            lib.SymmetryFunctionSet_eval_with_derivatives(
+            lib.SymmetryFunctionSet_eval_with_derivatives_atomwise(
                 self.obj, len(atoms), types_ptr, atoms.get_positions(), Gs, dGs)
             return ([Gs[cum_Gs[i]:cum_Gs[i+1]] for i in range(len(atoms))],
                 [dGs[cum_Gs[i]:cum_Gs[i+1],:] for i in range(len(atoms))])
         else:
-            lib.SymmetryFunctionSet_eval(
+            lib.SymmetryFunctionSet_eval_atomwise(
                 self.obj, len(atoms), types_ptr, atoms.get_positions(), Gs)
             return [Gs[cum_Gs[i]:cum_Gs[i+1]] for i in range(len(atoms))]          
 
